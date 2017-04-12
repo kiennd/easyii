@@ -28,28 +28,31 @@ $moduleName = $this->context->module->id;
                     EasyiiCMS
                 </div>
                 <div class="nav">
-                    <a href="<?= Yii::$app->homeUrl ?>" class="pull-left"><i class="glyphicon glyphicon-home"></i> <?= Yii::t('easyii', 'Open site') ?></a>
+                    <a href="<?= Url::to(['/']) ?>" class="pull-left"><i class="glyphicon glyphicon-home"></i> <?= Yii::t('easyii', 'Open site') ?></a>
                     <a href="<?= Url::to(['/admin/sign/out']) ?>" class="pull-right"><i class="glyphicon glyphicon-log-out"></i> <?= Yii::t('easyii', 'Logout') ?></a>
                 </div>
             </div>
             <div class="main">
                 <div class="box sidebar">
                     <?php foreach(Yii::$app->getModule('admin')->activeModules as $module) : ?>
-                        <a href="<?= Url::to(["/admin/$module->name"]) ?>" class="menu-item <?= ($moduleName == $module->name ? 'active' : '') ?>">
-                            <?php if($module->icon != '') : ?>
-                                <i class="glyphicon glyphicon-<?= $module->icon ?>"></i>
-                            <?php endif; ?>
-                            <?= $module->title ?>
-                            <?php if($module->notice > 0) : ?>
-                                <span class="badge"><?= $module->notice ?></span>
-                            <?php endif; ?>
-                        </a>
+                        <?php if(IS_ROOT || (strpos(Yii::$app->user->identity->modules, '-'.$module->name.'-') !== false)): ?>
+                            <a href="<?= Url::to(["/admin/$module->name"]) ?>" class="menu-item <?= ($moduleName == $module->name ? 'active' : '') ?>">
+                                <?php if($module->icon != '') : ?>
+                                    <i class="glyphicon glyphicon-<?= $module->icon ?>"></i>
+                                <?php endif; ?>
+                                <?= $module->title ?>
+                                <?php if($module->notice > 0) : ?>
+                                    <span class="badge"><?= $module->notice ?></span>
+                                <?php endif; ?>
+                            </a>
+                        <?php endif; ?>
                     <?php endforeach; ?>
-                    <a href="<?= Url::to(['/admin/settings']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'settings') ? 'active' :'' ?>">
-                        <i class="glyphicon glyphicon-cog"></i>
-                        <?= Yii::t('easyii', 'Settings') ?>
-                    </a>
+                    
                     <?php if(IS_ROOT) : ?>
+                        <a href="<?= Url::to(['/admin/settings']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'settings') ? 'active' :'' ?>">
+                            <i class="glyphicon glyphicon-cog"></i>
+                            <?= Yii::t('easyii', 'Settings') ?>
+                        </a>
                         <a href="<?= Url::to(['/admin/modules']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'modules') ? 'active' :'' ?>">
                             <i class="glyphicon glyphicon-folder-close"></i>
                             <?= Yii::t('easyii', 'Modules') ?>

@@ -31,7 +31,6 @@ class Catalog extends \yii\easyii\components\API
     private $_items;
     private $_adp;
     private $_item = [];
-    private $_last;
 
     public function api_cat($id_slug)
     {

@@ -1,4 +1,5 @@
 <?php
+
 use yii\easyii\models\Module;
 use yii\helpers\Html;
 use yii\helpers\Url;

@@ -21,7 +21,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
     public function rules()
     {
         return [
-            ['username', 'required'],
+            [['username','modules'], 'required'],
             ['username', 'unique'],
             ['password', 'required', 'on' => 'create'],
             ['password', 'safe'],
@@ -45,6 +45,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
                 $this->password = $this->hashPassword($this->password);
             } else {
                 $this->password = $this->password != '' ? $this->hashPassword($this->password) : $this->oldAttributes['password'];
+                // var_dump($this);
             }
             return true;
         } else {

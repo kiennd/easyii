@@ -12,14 +12,9 @@ use yii\helpers\Url;
 class Controller extends \yii\web\Controller
 {
     public $enableCsrfValidation = false;
+    public $layout = '@easyii/views/layouts/main';
     public $rootActions = [];
     public $error = null;
-    
-    public function init()
-    {
-        parent::init();
-        $this->layout = Yii::$app->getModule('admin')->controllerLayout;
-    }
 
     /**
      * Check authentication, and root rights for actions
@@ -39,11 +34,32 @@ class Controller extends \yii\web\Controller
             return false;
         }
         else{
+
+            // echo(Yii::$app->controller->module->id);
+            // echo '<br>';
+            // echo Yii::$app->user->identity->modules;
+            // echo '<br>';
+            
+            // echo strpos(Yii::$app->user->identity->modules, '-'.Yii::$app->controller->module->id.'-') !== false;
+            // var_dump() ;
+
+            if(Yii::$app->controller->module->id == 'admin'){
+                $this->setReturnUrl();
+                return true;
+            }
+
+            if(!IS_ROOT && !(strpos(Yii::$app->user->identity->modules, '-'.Yii::$app->controller->module->id.'-') !== false)){
+                throw new \yii\web\ForbiddenHttpException('You cannot access this action');
+            }
+
+
+
             if(!IS_ROOT && ($this->rootActions == 'all' || in_array($action->id, $this->rootActions))){
                 throw new \yii\web\ForbiddenHttpException('You cannot access this action');
             }
 
             if($action->id === 'index'){
+
                 $this->setReturnUrl();
             }
 
